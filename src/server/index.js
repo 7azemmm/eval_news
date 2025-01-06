@@ -11,7 +11,7 @@ dotenv.config();
 // Constants
 const PORT = process.env.PORT || 8000;
 const TEXT_RAZOR_API_URL = "http://api.textrazor.com";
-const TEXT_RAZOR_API_KEY = process.env.API_KEY;
+const TEXT_RAZOR_API_KEY = process.env.API_KEY || "a70ce9b2bf0c236f776f92cb00391080c2a9dc2fcde60274668f538c";
 
 // Initialize Express app
 const app = express();
