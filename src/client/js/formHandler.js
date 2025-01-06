@@ -62,7 +62,7 @@ async function sendUrlToServer(url) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text :url }),
+      body: JSON.stringify({ url :url }),
     });
 
     if (!response.ok) {
@@ -70,6 +70,7 @@ async function sendUrlToServer(url) {
     }
 
     const data = await response.json();
+    console.log(data);
     updateUI(data);
   } catch (error) {
     console.error("Request failed:", error);
@@ -81,15 +82,28 @@ async function sendUrlToServer(url) {
 
 function updateUI(data) {
   const resultDiv = document.getElementById("results");
+  
   if (!resultDiv) {
     console.error("Results container not found");
     return;
   }
 
-  const entities = data.entities?.map(e => e.entityId).join(", ") || "None";
-  const topics = data.topics?.map(t => t.label).join(", ") || "None";
-  const summary = data.summary || "N/A";
+  console.log("Received data:", data); 
 
+ 
+  const lang = data.response.language || "Unknown";
+
+ // Check if entities exist and map over them, else return "None"
+const entities = data.response.entities && Array.isArray(data.response.entities)
+? data.response.entities.slice(0, 5).map(e => e.entityId).join(", ")  // Limit to first 5
+: "None";
+
+
+const topics = data.response.topics && Array.isArray(data.response.topics)
+? data.response.topics.slice(0, 5).map(t => t.label).join(", ")  
+: "None";
+
+  // Update the UI with the processed data
   resultDiv.innerHTML = `
     <h3>Analysis Results:</h3>
     <div class="result-item">
@@ -97,12 +111,12 @@ function updateUI(data) {
       <p>${entities}</p>
     </div>
     <div class="result-item">
-      <h4>Topics:</h4>
-      <p>${topics}</p>
+      <h4>Language:</h4>
+      <p>${lang}</p>
     </div>
     <div class="result-item">
-      <h4>Summary:</h4>
-      <p>${summary}</p>
+      <h4>Topics:</h4>
+      <p>${topics}</p>
     </div>
   `;
 }

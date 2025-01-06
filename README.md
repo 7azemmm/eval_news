@@ -50,3 +50,8 @@ This project uses the following technologies:
    ```bash
    npm run dev
 
+4. **run server**:
+open new terminal , navigate to src then server then run the server
+   ```bash
+   node index.js
+
